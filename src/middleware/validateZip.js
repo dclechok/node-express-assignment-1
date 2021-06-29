@@ -1,3 +1,6 @@
-function validateZip(req, res, next) {}
+function validateZip(req, res, next) {
+
+    
+}
 
 module.exports = validateZip;

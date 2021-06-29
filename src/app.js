@@ -1,17 +1,40 @@
 const express = require("express");
-// const morgan = require('morgan');
+const validateZip = require("./middleware/validateZip");
+const getZoos = require("./utils/getZoos");
 
 const app = express();
 
-// app.use(morgan('dev'));
-
-app.get('/', (req, res, next) => {
-    console.log('home');
+app.get("/", (req, res, next) => {
+  //home
+  res.send("Home");
 });
 
-app.get('/check/:zip', (req, res, next) => {
-    const zipcode = req.params.zip;
-    console.log(zipcode);
+const checkZoo = (req, res, next) => {
+  //router-leve middleware
+  //check zip code in records
+  const zip = req.params.zip;
+  if (!getZoos(zip)) {
+    res.send(`${zip} does not exist in our records.`);
+  }else if(getZoos(zip).length < 1){
+      res.send(`${zip} has no zoos.`);
+  }else {
+    next();
+  }
+};
+
+app.get("/check/:zip", checkZoo, (req, res, next) => {
+  const zip = req.params.zip;
+  res.send(`${zip} exists in our records.`);
 });
+
+app.get("/zoos/:zip", checkZoo, (req, res, next) => {
+  const zip = req.params.zip;
+  const zoosInZip = getZoos(zip).join('; ');
+  res.send(`${zip} zoos: ${zoosInZip}`);
+});
+
+// app.use((err, req, res, next) => {
+//   res.send(`${zip} does not exist in our records.`);
+// });
 
 module.exports = app;

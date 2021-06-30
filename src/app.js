@@ -9,25 +9,12 @@ app.get("/", (req, res, next) => {
   res.send("Home");
 });
 
-const checkZoo = (req, res, next) => {
-  //router-leve middleware
-  //check zip code in records
-  const zip = req.params.zip;
-  if (!getZoos(zip) || zip.length != 5) {
-    res.send(`${zip} does not exist in our records.`);
-  } else if (getZoos(zip).length < 1) {
-    res.send(`${zip} has no zoos.`);
-  } else {
-    next();
-  }
-};
-
-app.get("/check/:zip", checkZoo, (req, res, next) => {
+app.get("/check/:zip", validateZip, (req, res, next) => {
   const zip = req.params.zip;
   res.send(`${zip} exists in our records.`);
 });
 
-app.get("/zoos/:zip", checkZoo, (req, res, next) => {
+app.get("/zoos/:zip", validateZip, (req, res, next) => {
   const zip = req.params.zip;
   const zoosInZip = getZoos(zip).join("; ");
   res.send(`${zip} zoos: ${zoosInZip}`);
@@ -39,7 +26,7 @@ app.get("/zoos/all", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.send(err);
+  res.send("That route could not be found!");
 });
 
 module.exports = app;

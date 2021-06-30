@@ -25,7 +25,7 @@ app.get("/zoos/all", (req, res) => {
   res.send(admin);
 });
 
-app.use((err, req, res, next) => {
+app.use((req, res, next) => {
   res.send("That route could not be found!");
 });
 

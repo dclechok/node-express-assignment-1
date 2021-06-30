@@ -1,12 +1,13 @@
 const getZoos = require("../utils/getZoos");
 
-  //router-leve middleware
-  //check zip code in records
+//router-leve middleware
+//check zip code in records
 
 function validateZip(req, res, next) {
-    const zip = req.params.zip;
-  if (!getZoos(zip) || zip.length != 5) {
-      console.log('hello');
+  let zip = req.params.zip;
+    const aZip = Number(zip);
+  if (zip.length != 5 || isNaN(aZip)) res.send(`Zip (${zip}) is invalid!`);
+  if (!getZoos(zip)) {
     res.send(`${zip} does not exist in our records.`);
   } else if (getZoos(zip).length < 1) {
     res.send(`${zip} has no zoos.`);

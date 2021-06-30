@@ -5,7 +5,7 @@ const getZoos = require("../utils/getZoos");
 
 function validateZip(req, res, next) {
   let zip = req.params.zip;
-    const aZip = Number(zip);
+  const aZip = Number(zip);
   if (zip.length != 5 || isNaN(aZip)) res.send(`Zip (${zip}) is invalid!`);
   if (!getZoos(zip)) {
     res.send(`${zip} does not exist in our records.`);
